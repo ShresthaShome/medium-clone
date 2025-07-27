@@ -2,6 +2,11 @@
 
     <div class="py-2">
         <div class="max-w-8xl mx-auto sm:px-3 lg:px-4">
+            @if (session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 text-center py-3 rounded mb-3">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg group">
                 <div class="p-2 text-gray-900 flex items-center justify-center">
 

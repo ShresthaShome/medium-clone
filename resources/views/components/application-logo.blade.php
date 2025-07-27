@@ -1,1 +1,1 @@
-<img src="medium_logo.png" class="w-32">
+<img src="{{ asset('medium_logo.png') }}" class="w-32">
