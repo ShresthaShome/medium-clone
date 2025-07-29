@@ -2,7 +2,7 @@
     class="flex justify-between bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 max-h-48 mb-5">
     <div class="p-5 flex flex-col flex-1">
         <div>
-            <a href="#">
+            <a href="{{ route('post.show', ['username' => $post->user->username, 'post' => $post]) }}">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white pl-2">
                     {{ $post->title }}
                 </h5>
@@ -11,7 +11,7 @@
                 {{ Str::words($post->content, 20) }}
             </div>
         </div>
-        <a href="#" class="pl-2 mt-auto">
+        <a href="{{ route('post.show', [$post->user->username, $post->slug]) }}" class="pl-2 mt-auto">
             <x-primary-button>
                 Read more
                 <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +22,7 @@
             </x-primary-button>
         </a>
     </div>
-    <a href="#">
+    <a href="{{ route('post.show', [$post->user->username, $post->slug]) }}">
         <img class="h-48 w-48 object-cover rounded-lg" src="{{ Storage::url($post->image) }}" alt="" />
     </a>
 </div>

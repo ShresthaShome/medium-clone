@@ -17,12 +17,10 @@
         @csrf
         @method('patch')
 
-        @if ($user->image)
-            <div class="flex items-center gap-4 w-full justify-center">
-                <img src="{{ Storage::url($user->image) }}" alt="{{ $user->name }}'s profile picture"
-                    class="w-32 h-32 rounded-full object-cover">
-            </div>
-        @endif
+        <div class="flex items-center gap-4 w-full justify-center">
+            <img src="{{ $user->imageUrl() }}" alt="{{ $user->name }}'s profile picture"
+                class="w-32 h-32 rounded-full object-cover">
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
