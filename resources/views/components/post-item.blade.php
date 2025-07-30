@@ -7,8 +7,13 @@
                     {{ $post->title }}
                 </h5>
             </a>
-            <div class="mb-3 font-normal text-gray-700 dark:text-gray-400 pl-2">
-                {{ Str::words($post->content, 20) }}
+            <div class="mb-3 font-normal text-gray-700 dark:text-gray-400 pl-2 overflow-hidden">
+                <span class="hidden lg:block">
+                    {{ Str::words($post->content, 20) }}</span>
+                <span class="hidden md:block lg:hidden">
+                    {{ Str::words($post->content, 10) }}</span>
+                <span class="md:hidden">
+                    {{ Str::words($post->content, 5) }}</span>
             </div>
         </div>
         <a href="{{ route('post.show', [$post->user->username, $post->slug]) }}" class="pl-2 mt-auto">

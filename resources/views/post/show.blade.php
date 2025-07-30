@@ -7,11 +7,14 @@
 
                 {{-- User Profile --}}
                 <div class="flex gap-4 items-center justify-start">
-                    <img src="{{ $post->user->imageUrl() }}" alt="{{ $post->user->name }}'s profile picture"
-                        class="w-10 h-10 rounded-full">
+                    <a href="{{ route('profile.show', $post->user->username) }}"
+                        class="inline-block p-[1px] bg-white border-2 border-transparent hover:border-emerald-500 rounded-full">
+                        <x-user-profile-pic :user="$post->user" />
+                    </a>
                     <div class="flex flex-col items-start pt-1">
                         <div class="flex justify-center gap-2">
-                            <h3>{{ $post->user->name }}</h3>
+                            <a href="{{ route('profile.show', $post->user->username) }}"
+                                class="hover:underline hover:text-green-900">{{ $post->user->name }}</a>
                             &middot;
                             <a href="#" class="text-emerald-500">Follow</a>
                         </div>
@@ -45,10 +48,6 @@
                         {{ $post->category->name }}
                     </span>
                 </div>
-
-
-                <x-clap-section :post="$post" />
-
             </div>
         </div>
     </div>
