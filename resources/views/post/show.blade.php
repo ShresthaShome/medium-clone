@@ -12,11 +12,24 @@
                         <x-user-profile-pic :user="$post->user" />
                     </a>
                     <div class="flex flex-col items-start pt-1">
-                        <div class="flex justify-center gap-2">
+                        <div x-data="{
+                            following: {{ $post->user->isFollowedBy(auth()->user()) ? 'true' : 'false' }},
+                            follow() {
+                                this.following = !this.following;
+                                axios.post('/follow/{{ $post->user->id }}')
+                                    .then(res => {
+                                        console.log(res.data);
+                                    });
+                            },
+                        }" class="flex justify-center gap-2">
                             <a href="{{ route('profile.show', $post->user->username) }}"
                                 class="hover:underline hover:text-green-900">{{ $post->user->name }}</a>
                             &middot;
-                            <a href="#" class="text-emerald-500">Follow</a>
+                            @guest<a href="#" class="text-emerald-500">Follow</a>@endguest
+                            @auth
+                                <button @click="follow()" x-text="following? 'Unfollow' : 'Follow'"
+                                    :class="following ? 'text-red-600' : 'text-emerald-500'"></button>
+                            @endauth
                         </div>
 
                         <div class="flex justify-center gap-2">
