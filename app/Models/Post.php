@@ -30,6 +30,16 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function claps()
+    {
+        return $this->hasMany(Clap::class);
+    }
+
+    public function isClappedByUser(User $user)
+    {
+        return $this->claps()->where('user_id', $user->id)->exists();
+    }
+
     public function readTime($wordsPerMinute = 200)
     {
         $wordCount = str_word_count(strip_tags($this->content));
