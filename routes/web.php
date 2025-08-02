@@ -34,6 +34,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/clap/{post}', [ClapController::class, 'clapUnclap'])
         ->name('clap');
+
+    Route::get('/post/{post:slug}', [PostController::class, 'edit'])
+        ->name('post.edit');
+
+    Route::put('/post/{post:slug}', [PostController::class, 'update'])
+        ->name('post.update');
+
+    Route::delete('/delete/{post:slug}', [PostController::class, 'destroy'])
+        ->name('post.destroy');
 });
 
 Route::middleware('auth')->group(function () {

@@ -24,12 +24,15 @@
                         }" class="flex justify-center gap-2">
                             <a href="{{ route('profile.show', $post->user->username) }}"
                                 class="hover:underline hover:text-green-900">{{ $post->user->name }}</a>
-                            &middot;
-                            @guest<a href="{{ route('login') }}" class="text-emerald-500">Follow</a>@endguest
-                            @auth
-                                <button @click="follow()" x-text="following? 'Unfollow' : 'Follow'"
-                                    :class="following ? 'text-red-600' : 'text-emerald-500'"></button>
-                            @endauth
+
+                            @if (auth()->user() && auth()->user()->id !== $post->user->id)
+                                &middot;
+                                @guest<a href="{{ route('login') }}" class="text-emerald-500">Follow</a>@endguest
+                                @auth
+                                    <button @click="follow()" x-text="following? 'Unfollow' : 'Follow'"
+                                        :class="following ? 'text-red-600' : 'text-emerald-500'"></button>
+                                @endauth
+                            @endif
                         </div>
 
                         <div class="flex justify-center gap-2">
@@ -48,8 +51,7 @@
 
                 {{-- Content Section --}}
                 <div class="mt-4">
-                    <img src="{{ $post->imageUrl() }}" alt="{{ $post->title }}"
-                        class="w-full aspect-video object-cover">
+                    <img src="{{ $post->imageUrl() }}" alt="{{ $post->title }}" class="w-full object-cover">
 
                     <div class="mt-4">
                         {{ $post->content }}
@@ -57,7 +59,7 @@
                 </div>
 
                 <div class="mt-8">
-                    <a href="{{ route('post.byCategory', $post->category->id) }}"
+                    <a href="{{ route('post.byCategory', strtolower($post->category->name)) }}"
                         class="px-4 py-2 bg-gray-300 rounded-2xl">
                         {{ $post->category->name }}
                     </a>

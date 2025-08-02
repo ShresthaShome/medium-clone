@@ -36,5 +36,17 @@
             @auth</button> @endauth @guest </a> @endguest
 
         <span x-text="count"></span>
+
+        @if (auth()->user() && auth()->user()->id === $post->user_id)
+            <div class="ml-2 flex gap-4">
+                <a href="{{ route('post.edit', $post->slug) }}" class="text-yellow-700">Edit</a>
+                <form action="{{ route('post.destroy', $post->slug) }}" method="POST"
+                    onsubmit="return confirm('Are you sure you want to delete this post?');">
+                    @csrf
+                    @method('DELETE')
+                    <button class="text-red-700">Delete</button>
+                </form>
+            </div>
+        @endif
     </div>
 </div>

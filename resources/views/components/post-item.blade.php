@@ -12,9 +12,9 @@
                 <span class="hidden lg:block">
                     {{ Str::words($post->content, 20) }}</span>
                 <span class="hidden md:block lg:hidden">
-                    {{ Str::words($post->content, 10) }}</span>
-                <span class="md:hidden">
                     {{ Str::words($post->content, 5) }}</span>
+                <span class="md:hidden">
+                    {{ Str::words($post->content, 2) }}</span>
             </a>
         </div>
         <a href="{{ route('post.show', [$post->user->username, $post->slug]) }}"

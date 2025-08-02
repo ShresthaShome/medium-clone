@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostCreateRequest;
+use App\Http\Requests\PostUpdateRequest;
 use App\Models\Category;
 use App\Models\Post;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -53,7 +52,6 @@ class PostController extends Controller
         $data['image'] = $image->store('posts', 'public');
 
         $data['user_id'] = Auth::id();
-        $data['slug'] = Str::slug($data['title']);
 
         Post::create($data);
 
@@ -75,15 +73,42 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        if (Auth::id() !== $post->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('post.edit', [
+            'post' => $post,
+            'categories' => Category::get(),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(PostUpdateRequest $request, Post $post)
     {
-        //
+        if (Auth::id() !== $post->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $image = $data['image'];
+            $data['image'] = $image->store('posts', 'public');
+        } else {
+            $data['image'] = $post->image;
+        }
+
+        $data['user_id'] = $post->user_id;
+
+        $post->update($data);
+
+        return redirect()->route('post.show', [
+            'username' => $post->user->username,
+            'post' => $post,
+        ])->with('success', 'Post updated successfully.');
     }
 
     /**
@@ -91,7 +116,12 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        if (Auth::id() !== $post->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $post->delete();
+        return redirect()->route('dashboard')->with('success', 'Post deleted successfully.');
     }
 
     public function category(string $categoryName)
