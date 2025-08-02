@@ -17,14 +17,21 @@
                     {{ Str::words($post->content, 2) }}</span>
             </a>
         </div>
-        <a href="{{ route('post.show', [$post->user->username, $post->slug]) }}"
-            class="pl-2 mt-auto text-sm flex gap-4 items-center">
-            {{ $post->created_at->format('M d, Y') }}
-            <span class="inline-flex items-center gap-2">
-                <x-clap-svg />
-                {{ $post->claps_count }}
-            </span>
-        </a>
+        <div class="pl-2 mt-auto text-sm flex gap-4 items-center">
+            <a href="{{ route('profile.show', $post->user->username) }}" class="flex items-center gap-2">
+                <div
+                    class="inline-block p-[1px] bg-white border-2 border-transparent hover:border-emerald-500 rounded-full">
+                    <x-user-profile-pic :user="$post->user" size="w-7 h-7" />
+                </div>
+                <span class="hover:underline">{{ $post->user->username }}</span>
+            </a>
+            <a href="{{ route('post.show', [$post->user->username, $post->slug]) }}" class="flex items-center gap-4">
+                <span>{{ $post->created_at->format('M d, Y') }}</span>
+                <span class="inline-flex items-center gap-2">
+                    <x-clap-svg />
+                    {{ $post->claps_count }}
+                </span></a>
+        </div>
     </div>
     <a href="{{ route('post.show', [$post->user->username, $post->slug]) }}">
         <img class="h-48 w-48 object-cover rounded-lg" src="{{ Storage::url($post->image) }}" alt="" />
