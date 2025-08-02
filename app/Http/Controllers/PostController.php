@@ -21,7 +21,7 @@ class PostController extends Controller
         $query = Post::latest();
 
         if ($user) {
-            $ids = $user->following->pluck('id');
+            $ids = $user->following->pluck('id')->push($user->id);
             $query->whereIn('user_id', $ids);
         }
 
@@ -94,14 +94,15 @@ class PostController extends Controller
         //
     }
 
-    public function category(Category $category)
+    public function category(string $categoryName)
     {
+        $category = Category::whereRaw('LOWER(name) = ?', [strtolower($categoryName)])->firstOrFail();
         $user = Auth::user();
 
         $query = $category->posts()->latest();
 
         if ($user) {
-            $ids = $user->following->pluck('id');
+            $ids = $user->following->pluck('id')->push($user->id);
             $query->whereIn('user_id', $ids);
         }
 

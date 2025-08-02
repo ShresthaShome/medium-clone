@@ -17,7 +17,7 @@ Route::get('/@{user:username}', [PublicProfileController::class, 'show'])
 Route::get('/@{username}/{post:slug}', [PostController::class, 'show'])
     ->name('post.show');
 
-Route::get('/category/{category}', [PostController::class, 'category'])
+Route::get('/category/{categoryName}', [PostController::class, 'category'])
     ->name('post.byCategory');
 
 Route::middleware(['auth', 'verified'])->group(function () {

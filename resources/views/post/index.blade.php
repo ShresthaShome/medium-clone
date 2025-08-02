@@ -64,6 +64,14 @@
             btnRight.classList.toggle('pointer-events-none', btnRight.disabled);
         }
 
+        window.addEventListener('load', () => {
+            const selected = container.querySelector('.active');
+            if (selected) {
+                container.scrollLeft = selected.offsetLeft - container.offsetLeft - 300;
+                updateButtons();
+            }
+        });
+
         // Initial check
         updateButtons();
 
