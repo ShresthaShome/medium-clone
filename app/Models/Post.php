@@ -35,8 +35,12 @@ class Post extends Model
         return $this->hasMany(Clap::class);
     }
 
-    public function isClappedByUser(User $user)
+    public function isClappedByUser(?User $user)
     {
+        if (!$user) {
+            return false;
+        }
+
         return $this->claps()->where('user_id', $user->id)->exists();
     }
 

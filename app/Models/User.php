@@ -74,8 +74,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return "https://icons.veryicon.com/png/o/miscellaneous/rookie-official-icon-gallery/225-default-avatar.png";
     }
 
-    public function isFollowedBy(User $user)
+    public function isFollowedBy(?User $user)
     {
+        if (!$user) {
+            return false;
+        }
+
         return $this->followers()->where('follower_id', $user->id)->exists();
     }
 }
