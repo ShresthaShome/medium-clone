@@ -25,7 +25,7 @@
                             <a href="{{ route('profile.show', $post->user->username) }}"
                                 class="hover:underline hover:text-green-900">{{ $post->user->name }}</a>
                             &middot;
-                            @guest<a href="#" class="text-emerald-500">Follow</a>@endguest
+                            @guest<a href="{{ route('login') }}" class="text-emerald-500">Follow</a>@endguest
                             @auth
                                 <button @click="follow()" x-text="following? 'Unfollow' : 'Follow'"
                                     :class="following ? 'text-red-600' : 'text-emerald-500'"></button>
@@ -57,9 +57,10 @@
                 </div>
 
                 <div class="mt-8">
-                    <span class="px-4 py-2 bg-gray-300 rounded-2xl">
+                    <a href="{{ route('post.byCategory', $post->category->id) }}"
+                        class="px-4 py-2 bg-gray-300 rounded-2xl">
                         {{ $post->category->name }}
-                    </span>
+                    </a>
                 </div>
             </div>
         </div>

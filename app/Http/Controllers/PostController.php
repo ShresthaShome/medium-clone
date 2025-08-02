@@ -16,7 +16,16 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->paginate(5);
+        $user = Auth::user();
+
+        $query = Post::latest();
+
+        if ($user) {
+            $ids = $user->following->pluck('id');
+            $query->whereIn('user_id', $ids);
+        }
+
+        $posts = $query->paginate(5);
 
         return view('post.index', [
             'posts' => $posts,
@@ -87,7 +96,16 @@ class PostController extends Controller
 
     public function category(Category $category)
     {
-        $posts = $category->posts()->latest()->paginate(5);
+        $user = Auth::user();
+
+        $query = $category->posts()->latest();
+
+        if ($user) {
+            $ids = $user->following->pluck('id');
+            $query->whereIn('user_id', $ids);
+        }
+
+        $posts = $query->paginate(5);
 
         return view('post.index', [
             'posts' => $posts,
