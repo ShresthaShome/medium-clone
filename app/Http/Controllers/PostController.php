@@ -18,7 +18,7 @@ class PostController extends Controller
     {
         $user = Auth::user();
 
-        $query = Post::latest();
+        $query = Post::with('user')->withCount('claps')->latest();
 
         if ($user) {
             $ids = $user->following->pluck('id')->push($user->id);
@@ -99,7 +99,7 @@ class PostController extends Controller
         $category = Category::whereRaw('LOWER(name) = ?', [strtolower($categoryName)])->firstOrFail();
         $user = Auth::user();
 
-        $query = $category->posts()->latest();
+        $query = $category->posts()->with('user')->withCount('claps')->latest();
 
         if ($user) {
             $ids = $user->following->pluck('id')->push($user->id);
