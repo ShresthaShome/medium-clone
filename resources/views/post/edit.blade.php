@@ -55,6 +55,14 @@
                         <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
                     </div>
 
+                    <!-- Published At -->
+                    <div class="flex flex-col items-start gap-1 w-full max-w-xl">
+                        <x-input-label for="published_at" :value="__('Publish At')" class="text-[18px] pt-1" />
+                        <x-text-input id="published_at" class="block mt-1 w-full" type="datetime-local"
+                            name="published_at" :value="old('published_at', $post->published_at)" />
+                        <x-input-error :messages="$errors->get('published_at')" class="mt-2" />
+                    </div>
+
                     <x-primary-button type="submit" class="max-w-lg w-1/4 flex items-center justify-center">
                         {{ __('Update') }}
                     </x-primary-button>
@@ -62,4 +70,5 @@
             </div>
         </div>
     </div>
+
 </x-app-layout>

@@ -6,6 +6,7 @@ use App\Http\Requests\PostCreateRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Models\Category;
 use App\Models\Post;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
@@ -17,10 +18,15 @@ class PostController extends Controller
     {
         $user = Auth::user();
 
-        $query = Post::with('user')->withCount('claps')->latest();
+        $query = Post::where('published_at', '<=', now())
+            ->with('user')
+            ->withCount('claps')
+            ->latest();
 
         if ($user) {
-            $ids = $user->following->pluck('id')->push($user->id);
+            $ids = $user->following
+                ->pluck('id')
+                ->push($user->id);
             $query->whereIn('user_id', $ids);
         }
 
@@ -53,9 +59,14 @@ class PostController extends Controller
 
         $data['user_id'] = Auth::id();
 
+        if (!$data['published_at'] || $data['published_at'] < now()) {
+            $data['published_at'] = now();
+        }
+
         Post::create($data);
 
-        return redirect()->route('dashboard')->with('success', 'Post created successfully.');
+        return redirect()->route('dashboard')
+            ->with('success', 'Post created successfully.');
     }
 
     /**
@@ -103,12 +114,18 @@ class PostController extends Controller
 
         $data['user_id'] = $post->user_id;
 
+        if (!$data['published_at'] || $data['published_at'] < now()) {
+            $data['published_at'] = Carbon::now()->setTimezone('Asia/Dhaka');
+        }
+
         $post->update($data);
 
-        return redirect()->route('post.show', [
-            'username' => $post->user->username,
-            'post' => $post,
-        ])->with('success', 'Post updated successfully.');
+        return redirect()
+            ->route('post.show', [
+                'username' => $post->user->username,
+                'post' => $post,
+            ])
+            ->with('success', 'Post updated successfully.');
     }
 
     /**
@@ -121,18 +138,27 @@ class PostController extends Controller
         }
 
         $post->delete();
-        return redirect()->route('dashboard')->with('success', 'Post deleted successfully.');
+        return redirect()->route('dashboard')
+            ->with('success', 'Post deleted successfully.');
     }
 
     public function category(string $categoryName)
     {
-        $category = Category::whereRaw('LOWER(name) = ?', [strtolower($categoryName)])->firstOrFail();
+        $category = Category::whereRaw('LOWER(name) = ?', [strtolower($categoryName)])
+            ->firstOrFail();
         $user = Auth::user();
 
-        $query = $category->posts()->with('user')->withCount('claps')->latest();
+        $query = $category->posts()
+            ->where('published_at', '<=', now())
+            ->with('user')
+            ->withCount('claps')
+            ->latest();
 
         if ($user) {
-            $ids = $user->following->pluck('id')->push($user->id);
+            $ids = $user->following
+                ->pluck('id')
+                ->push($user->id);
+
             $query->whereIn('user_id', $ids);
         }
 

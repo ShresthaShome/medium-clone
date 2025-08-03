@@ -22,6 +22,17 @@ class Post extends Model
         'published_at',
     ];
 
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+
+    protected $casts = [
+        'published_at' => 'datetime',
+    ];
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
